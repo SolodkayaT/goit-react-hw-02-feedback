@@ -17,56 +17,43 @@ class App extends Component {
 
   state = {
     good: this.props.initialValue,
-    neutral: 0,
-    bad: 0
+    neutral: this.props.initialValue,
+    bad: this.props.initialValue
   };
 
-  handleGood = () => {
-    this.setState((state, props) => ({
-      good: state.good + props.step
-    }));
-  };
-
-  handleNeutral = () => {
-    this.setState((state, props) => ({
-      neutral: state.neutral + props.step
-    }));
-  };
-
-  handleBad = () => {
-    this.setState((state, props) => ({
-      bad: state.bad + props.step
-    }));
+  handleFeedback = type => {
+    this.setState((state, props) => {
+      const key = type.toLowerCase();
+      return { [key]: state[key] + props.step };
+    });
   };
 
   countTotalFeedback = state => {
-    return state.good + state.neutral + state.bad;
+    return Object.values(state).reduce((acc, item) => acc + item, 0);
   };
 
-  countPositiveFeedbackPercentage = state => {
-    return Math.round(
-      (state.good / (state.good + state.neutral + state.bad)) * 100
-    );
+  countPositiveFeedbackPercentage = () => {
+    const { good, neutral, bad } = this.state;
+
+    return Math.round((good / (good + neutral + bad)) * 100);
   };
 
   render() {
+    const { good, neutral, bad } = this.state;
+
     return (
       <div>
         <Section title="Please leave feedbacck">
           <FeedbackOptions
             options={["Good", "Neutral", "Bad"]}
-            onLeaveFeedback={[
-              this.handleGood,
-              this.handleNeutral,
-              this.handleBad
-            ]}
+            onLeaveFeedback={this.handleFeedback}
           />
         </Section>
         <Section title="Statistics">
           <Statistics
-            good={this.state.good}
-            neutral={this.state.neutral}
-            bad={this.state.bad}
+            good={good}
+            neutral={neutral}
+            bad={bad}
             total={this.countTotalFeedback(this.state)}
             positivePercentage={this.countPositiveFeedbackPercentage(
               this.state
