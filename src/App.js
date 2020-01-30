@@ -1,18 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Statistics from "./componentes/Statistics";
-import FeedbackOptions from "./componentes/FeedbackOptions";
-import Section from "./componentes/Section";
+import Statistics from "./componentes/Statistics/Statistics";
+import FeedbackOptions from "./componentes/FeedbackOptions/FeedbackOptions";
+import Section from "./componentes/Section/Section";
 
 class App extends Component {
   static defaultProps = {
     initialValue: 0,
     step: 1
   };
+
   static propTypes = {
     initialValue: PropTypes.number,
     step: PropTypes.number
   };
+
   state = {
     good: this.props.initialValue,
     neutral: 0,
@@ -60,7 +62,7 @@ class App extends Component {
             ]}
           />
         </Section>
-        <Section>
+        <Section title="Statistics">
           <Statistics
             good={this.state.good}
             neutral={this.state.neutral}
